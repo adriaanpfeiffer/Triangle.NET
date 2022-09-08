@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 using MeshExplorer.Controls;
 using MeshExplorer.IO;
 using TriangleNet;
+using TriangleNet.Examples;
 using TriangleNet.Geometry;
 using TriangleNet.Meshing;
 using TriangleNet.Meshing.Algorithm;
 using TriangleNet.Rendering;
+using TriangleNet.Rendering.GDI;
 using TriangleNet.Smoothing;
 using TriangleNet.Voronoi;
 
@@ -137,6 +142,13 @@ namespace MeshExplorer
             {
                 settings.CurrentFile = "tmp-" + DateTime.Now.ToString("HH-mm-ss");
                 HandleNewInput();
+            }
+
+            if (input == null)
+            {
+                mesh = sender as Mesh;
+                if (mesh != null)
+                    HandleMeshImport();
             }
         }
 
@@ -273,14 +285,34 @@ namespace MeshExplorer
             this.Text = "Triangle.NET - Mesh Explorer - " + settings.CurrentFile;
         }
 
+        private int[] GetRegions(IMesh mesh)
+        {
+            mesh.Renumber();
+
+            var labels = new int[mesh.Triangles.Count];
+            var regions = new SortedSet<int>();
+
+            foreach (var t in mesh.Triangles)
+            {
+                labels[t.ID] = t.Label;
+                regions.Add(t.Label);
+            }
+
+            //if (colors.ColorDictionary == null)
+            //{
+            //    colors.CreateColorDictionary(regions, regions.Count);
+            //}
+
+            return labels;
+        }
+
         private void HandleMeshImport()
         {
             voronoi = null;
 
             // Render mesh
             renderManager.Set(mesh, true);
-
-            // Update window caption
+            renderManager.Update(GetRegions(mesh));
             this.Text = "Triangle.NET - Mesh Explorer - " + settings.CurrentFile;
 
             // Update Statistic view
@@ -502,7 +534,6 @@ namespace MeshExplorer
                 {
                     mesh = (Mesh)input.Triangulate(options, quality);
                 }
-
                 statisticView.UpdateStatistic(mesh);
 
                 HandleMeshUpdate();
@@ -521,19 +552,18 @@ namespace MeshExplorer
             UpdateLog();
         }
 
-        private void Refine()
+        private void Refine(QualityOptions refinementquality = null)
         {
             if (mesh == null) return;
 
             double area = meshControlView.ParamMaxAreaValue;
 
-            var quality = new QualityOptions();
+            var quality = refinementquality ?? new QualityOptions();
 
             if (area > 0 && area < 1)
             {
                 quality.MaximumArea = area * statisticView.Statistic.LargestArea;
             }
-
             quality.MinimumAngle = meshControlView.ParamMinAngleValue;
 
             double maxAngle = meshControlView.ParamMaxAngleValue;
@@ -789,7 +819,31 @@ namespace MeshExplorer
         {
             Renumber();
         }
+        private void examplesToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+        {
+            if (examplesToolStripMenuItem.DropDownItems.Count == 0)
+            {
+                var type = typeof(IExample);
+                var types = type.Assembly.GetTypes()
+                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
+                    .OrderBy(t => int.Parse(t.Name.Replace("Example", "")));
 
+                types.ToList().ForEach(t =>
+                {
+                    var example = (IExample)Activator.CreateInstance(t);
+                    var toolstripItem = examplesToolStripMenuItem.DropDownItems.Add($"{t.Name} - { example.Name}");
+                    toolstripItem.Click += (s, ea) =>
+                    {
+                        example.InputGenerated += frmGenerator_InputGenerated;
+                        example.Run();
+                    };
+                });
+            }
+        }
         #endregion
+
+
+
+
     }
 }

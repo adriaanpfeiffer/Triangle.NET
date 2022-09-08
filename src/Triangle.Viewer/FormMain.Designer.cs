@@ -56,6 +56,7 @@
             this.menuToolsTopology = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuToolsRcm = new System.Windows.Forms.ToolStripMenuItem();
+            this.examplesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btnMesh = new MeshExplorer.Controls.DarkButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -187,7 +188,8 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuFile,
             this.menuView,
-            this.menuTools});
+            this.menuTools,
+            this.examplesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(0);
@@ -266,19 +268,19 @@
             // 
             this.menuViewVoronoi.Enabled = false;
             this.menuViewVoronoi.Name = "menuViewVoronoi";
-            this.menuViewVoronoi.Size = new System.Drawing.Size(162, 22);
+            this.menuViewVoronoi.Size = new System.Drawing.Size(161, 22);
             this.menuViewVoronoi.Text = "Voronoi Diagram";
             this.menuViewVoronoi.Click += new System.EventHandler(this.menuViewVoronoi_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(159, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(158, 6);
             // 
             // menuViewLog
             // 
             this.menuViewLog.Name = "menuViewLog";
-            this.menuViewLog.Size = new System.Drawing.Size(162, 22);
+            this.menuViewLog.Size = new System.Drawing.Size(161, 22);
             this.menuViewLog.Text = "Show Log";
             this.menuViewLog.Click += new System.EventHandler(this.menuViewLog_Click);
             // 
@@ -292,7 +294,7 @@
             this.toolStripSeparator4,
             this.menuToolsRcm});
             this.menuTools.Name = "menuTools";
-            this.menuTools.Size = new System.Drawing.Size(46, 24);
+            this.menuTools.Size = new System.Drawing.Size(45, 24);
             this.menuTools.Text = "Tools";
             // 
             // menuToolsGen
@@ -334,6 +336,13 @@
             this.menuToolsRcm.Size = new System.Drawing.Size(195, 22);
             this.menuToolsRcm.Text = "Renumber nodes (RCM)";
             this.menuToolsRcm.Click += new System.EventHandler(this.menuToolsRcm_Click);
+            // 
+            // examplesToolStripMenuItem
+            // 
+            this.examplesToolStripMenuItem.Name = "examplesToolStripMenuItem";
+            this.examplesToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
+            this.examplesToolStripMenuItem.Text = "Examples";
+            this.examplesToolStripMenuItem.MouseEnter += new System.EventHandler(this.examplesToolStripMenuItem_MouseEnter);
             // 
             // btnMesh
             // 
@@ -412,7 +421,7 @@
         private Views.AboutView aboutView;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem menuToolsTopology;
-
+        private System.Windows.Forms.ToolStripMenuItem examplesToolStripMenuItem;
     }
 }
 

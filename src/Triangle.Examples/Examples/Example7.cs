@@ -1,5 +1,6 @@
 ﻿namespace TriangleNet.Examples
 {
+    using System;
     using System.Linq;
     using TriangleNet;
     using TriangleNet.Geometry;
@@ -11,16 +12,27 @@
     /// <summary>
     /// Boolean operations on mesh regions (intersection, difference, xor).
     /// </summary>
-    public static class Example7
+    public  class Example7 : IExample
     {
-        public static bool Run(bool print = false)
+        public Example7()
+        {
+            Name = "Boolean operations on meshes";
+            Description = "This example will show how to use regions to perform boolean operations on meshes. The code uses the RegionIterator class";
+        }
+        public string Name { get; }
+
+        public string Description { get; }
+
+        public EventHandler InputGenerated { get; set; }
+
+        public bool Run(bool print = false)
         {
             // Generate the input geometry.
             var polygon = new Polygon(8, true);
 
             // Two intersecting rectangles.
             var A = Generate.Rectangle(0d, 0d, 4d, 4d, label: 1);
-            var B = Generate.Rectangle(1d, 1d, 4d, 4d, label: 2);
+            var B = Generate.Rectangle(1d, 3, 2, 4, label: 2);
 
             polygon.Add(A);
             polygon.Add(B);
@@ -49,6 +61,8 @@
 
             // The xor of A and B.
             var xor = mesh.Triangles.Where(t => t.Label == 1 || t.Label == 2);
+
+            InputGenerated(mesh, EventArgs.Empty);
 
             return intersection.Any() && difference.Any() && xor.Any();
         }

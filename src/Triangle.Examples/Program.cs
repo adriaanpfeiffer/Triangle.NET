@@ -11,13 +11,13 @@ namespace TriangleNet
         {
             bool print = args.Contains("--print");
 
-            Check("Example  1", Example1.Run(print));
-            Check("Example  2", Example2.Run(print));
-            Check("Example  3", Example3.Run(print));
+            Check("Example  1", new Example1().Run(print));
+            Check("Example  2", new Example2().Run(print));
+            Check("Example  3", new Example3().Run(print));
             Check("Example  4", Example4.Run(print));
             Check("Example  5", Example5.Run(print));
             Check("Example  6", Example6.Run(print));
-            Check("Example  7", Example7.Run(print));
+            Check("Example  7", new Example7().Run(print));
             Check("Example  8", Example8.Run(print));
             Check("Example  9", Example9.Run());
             Check("Example 10", Example10.Run(print));

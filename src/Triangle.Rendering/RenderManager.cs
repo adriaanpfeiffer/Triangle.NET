@@ -2,6 +2,7 @@
 namespace TriangleNet.Rendering
 {
     using System.Collections.Generic;
+    using System.Linq;
     using TriangleNet.Geometry;
     using TriangleNet.Meshing;
     using TriangleNet.Rendering.Util;
@@ -108,6 +109,8 @@ namespace TriangleNet.Rendering
 
         public void Update(int[] partition)
         {
+            var uniquevalues = partition.Distinct();
+            context.ColorManager.CreateColorDictionary(uniquevalues);
             context.Add(partition);
             control.Refresh();
         }

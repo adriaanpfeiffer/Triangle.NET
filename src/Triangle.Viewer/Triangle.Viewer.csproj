@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Triangle.Examples\Triangle.Examples.csproj" />
     <ProjectReference Include="..\Triangle\Triangle.csproj" />
     <ProjectReference Include="..\Triangle.Rendering\Triangle.Rendering.csproj" />
     <ProjectReference Include="..\Triangle.Rendering.GDI\Triangle.Rendering.GDI.csproj" />

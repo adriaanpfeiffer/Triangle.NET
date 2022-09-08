@@ -1,5 +1,6 @@
 ﻿namespace TriangleNet.Examples
 {
+    using System;
     using TriangleNet.Geometry;
     using TriangleNet.Meshing;
     using TriangleNet.Rendering.Text;
@@ -7,9 +8,20 @@
     /// <summary>
     /// Triangulate a polygon with hole and set minimum angle constraint.
     /// </summary>
-    public static class Example3
+    public class Example3 : IExample
     {
-        public static bool Run(bool print = false)
+        public Example3()
+        {
+            Name = "Polygon with hole and minimum angle constraint";
+            Description = "Triangulate a polygon with hole and set minimum angle constraint.";
+        }
+        public string Name { get; }
+
+        public string Description { get; }
+
+        public EventHandler InputGenerated { get; set; }
+
+        public bool Run(bool print = false)
         {
             // Generate the input geometry.
             var poly = CreatePolygon();
@@ -19,6 +31,8 @@
 
             // Generate mesh using the polygons Triangulate extension method.
             var mesh = poly.Triangulate(quality);
+
+            InputGenerated(mesh, EventArgs.Empty);
 
             if (print) SvgImage.Save(mesh, "example-3.svg", 500);
 
