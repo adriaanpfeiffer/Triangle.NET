@@ -1,6 +1,7 @@
 ﻿
 namespace TriangleNet.Examples
 {
+    using System;
     using TriangleNet;
     using TriangleNet.Geometry;
     using TriangleNet.Meshing;
@@ -10,9 +11,20 @@ namespace TriangleNet.Examples
     /// <summary>
     /// Refine only a part of a polygon mesh by using region pointers and an area constraint.
     /// </summary>
-    public class Example5
+    public class Example5 : IExample
     {
-        public static bool Run(bool print = false)
+        public Example5()
+        {
+            Name = "Region pointers and area constraint.";
+            Description = "Refine only a part of a polygon mesh by using region pointers and an area constraint.";
+        }
+        public string Name { get; }
+
+        public string Description { get; }
+
+        public EventHandler InputGenerated { get; set; }
+
+        public bool Run(bool print = false)
         {
             // Generate the input geometry.
             var poly = CreatePolygon();
@@ -40,6 +52,8 @@ namespace TriangleNet.Examples
             var smoother = new SimpleSmoother();
 
             smoother.Smooth(mesh, 5);
+            
+            InputGenerated(mesh, EventArgs.Empty);
 
             if (print) SvgImage.Save(mesh, "example-5.svg", 500);
 

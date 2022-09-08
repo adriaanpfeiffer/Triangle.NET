@@ -15,7 +15,7 @@ namespace TriangleNet
             Check("Example  2", new Example2().Run(print));
             Check("Example  3", new Example3().Run(print));
             Check("Example  4", Example4.Run(print));
-            Check("Example  5", Example5.Run(print));
+            Check("Example  5", new Example5().Run(print));
             Check("Example  6", Example6.Run(print));
             Check("Example  7", new Example7().Run(print));
             Check("Example  8", Example8.Run(print));
