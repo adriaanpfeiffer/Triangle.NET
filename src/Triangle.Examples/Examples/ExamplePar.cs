@@ -5,6 +5,7 @@ namespace TriangleNet.Examples
     using System.Collections.Concurrent;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using TriangleNet;
     using TriangleNet.Geometry;
@@ -15,8 +16,9 @@ namespace TriangleNet.Examples
     /// <summary>
     /// Processing meshes in parallel.
     /// </summary>
-    public class ExamplePar
+    public class Example12 : Example
     {
+        public override string Name => "Processing meshes in parallel.";
         #region Point set triangulation
 
         /// <summary>
@@ -97,16 +99,18 @@ namespace TriangleNet.Examples
         /// <summary>
         /// Reads all .poly files from given directory and processes them in parallel.
         /// </summary>
-        public static bool Run(string dir)
+        public override bool Run(bool print = false)
         {
-            var files = Directory.EnumerateFiles(dir, "*.poly", SearchOption.AllDirectories);
+            string path = "../../../../Data";//"c:/some/directory/with/poly/files";
+
+            var files = Directory.EnumerateFiles(path, "*.poly", SearchOption.AllDirectories);
 
             var queue = new ConcurrentQueue<string>(files);
 
             int concurrencyLevel = Environment.ProcessorCount / 2;
 
             var tasks = new Task<MeshResult>[concurrencyLevel];
-
+            var meshQueue = new ConcurrentQueue<IMesh>();
             for (int i = 0; i < concurrencyLevel; i++)
             {
                 tasks[i] = Task.Run(() =>
@@ -123,7 +127,7 @@ namespace TriangleNet.Examples
                         RandomSource = () => Random.Shared
                     };
 
-                    var mesher = new GenericMesher(config);
+                    var mesher = new GenericMesher(new Configuration());
                     var result = new MeshResult();
 
                     while (queue.Count > 0)
@@ -133,8 +137,8 @@ namespace TriangleNet.Examples
                             var poly = FileProcessor.Read(file);
 
                             var mesh = mesher.Triangulate(poly);
-
                             ProcessMesh(mesh, result);
+                            meshQueue.Enqueue(mesh);
                         }
                     }
 
@@ -146,6 +150,11 @@ namespace TriangleNet.Examples
 
             Task.WaitAll(tasks);
 
+            foreach (var mesh in meshQueue)
+            {
+                SendInputGeneratedMessage(mesh);
+                Thread.Sleep(600);
+            }
             int numberOfTriangles = tasks.Sum(t => t.Result.NumberOfTriangles);
             int invalid = tasks.Sum(t => t.Result.Invalid);
 

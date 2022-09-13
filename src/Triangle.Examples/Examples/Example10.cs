@@ -9,9 +9,11 @@ namespace TriangleNet.Examples
     /// <summary>
     /// Troubleshooting: finding degenerate boundary triangles.
     /// </summary>
-    public class Example10
+    public class Example10 : Example
     {
-        public static bool Run(bool print = false)
+        public override string Name => "Troubleshooting: finding degenerate boundary triangles.";
+
+        public override bool Run(bool print = false)
         {
             var pts = new List<Vertex>
             {
@@ -36,6 +38,7 @@ namespace TriangleNet.Examples
             for (int i = 0; i < 10; i++)
             {
                 var mesh = poly.Triangulate();
+                SendInputGeneratedMessage(mesh);
 
                 var list = MeshValidator.GetDegenerateBoundaryTriangles(mesh);
 
@@ -56,7 +59,6 @@ namespace TriangleNet.Examples
                 // Random rotation.
                 poly = Rotate(pts, Math.PI * r.NextDouble());
             }
-
             return true;
         }
 

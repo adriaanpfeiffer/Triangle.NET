@@ -12,20 +12,15 @@
     /// <summary>
     /// Boolean operations on mesh regions (intersection, difference, xor).
     /// </summary>
-    public  class Example7 : IExample
+    public  class Example7 : Example
     {
         public Example7()
         {
-            Name = "Boolean operations on meshes";
             Description = "This example will show how to use regions to perform boolean operations on meshes. The code uses the RegionIterator class";
         }
-        public string Name { get; }
+        public override string Name => "Boolean operations on meshes";
 
-        public string Description { get; }
-
-        public EventHandler InputGenerated { get; set; }
-
-        public bool Run(bool print = false)
+        public override bool Run(bool print = false)
         {
             // Generate the input geometry.
             var polygon = new Polygon(8, true);
@@ -62,7 +57,7 @@
             // The xor of A and B.
             var xor = mesh.Triangles.Where(t => t.Label == 1 || t.Label == 2);
 
-            InputGenerated(mesh, EventArgs.Empty);
+            SendInputGeneratedMessage(mesh);
 
             return intersection.Any() && difference.Any() && xor.Any();
         }

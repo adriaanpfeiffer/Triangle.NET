@@ -8,20 +8,11 @@
     /// <summary>
     /// Triangulate a polygon with hole and set minimum angle constraint.
     /// </summary>
-    public class Example3 : IExample
+    public class Example3 : Example
     {
-        public Example3()
-        {
-            Name = "Polygon with hole and minimum angle constraint";
-            Description = "Triangulate a polygon with hole and set minimum angle constraint.";
-        }
-        public string Name { get; }
+        public override string Name => "Polygon with hole and minimum angle constraint";
 
-        public string Description { get; }
-
-        public EventHandler InputGenerated { get; set; }
-
-        public bool Run(bool print = false)
+        public override bool Run(bool print = false)
         {
             // Generate the input geometry.
             var poly = CreatePolygon();
@@ -32,7 +23,7 @@
             // Generate mesh using the polygons Triangulate extension method.
             var mesh = poly.Triangulate(quality);
 
-            InputGenerated(mesh, EventArgs.Empty);
+            SendInputGeneratedMessage(mesh);
 
             if (print) SvgImage.Save(mesh, "example-3.svg", 500);
 

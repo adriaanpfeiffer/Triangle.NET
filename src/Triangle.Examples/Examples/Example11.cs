@@ -12,7 +12,7 @@ namespace TriangleNet.Examples
     /// <summary>
     /// Scattered data interpolation without USE_Z or USE_ATTRIBS.
     /// </summary>
-    internal class Example11
+    public class Example11 : Example
     {
         // The function we are sampling.
         private static readonly Func<Point, double> F = p => Math.Sin(p.X) * Math.Cos(p.Y);
@@ -20,7 +20,9 @@ namespace TriangleNet.Examples
         // The mesh size, for a structured grid (SIZE x SIZE) points.
         private const int SIZE = 20;
 
-        public static bool Run(bool print = false)
+        public override string Name => "Scattered data interpolation without USE_Z or USE_ATTRIBS.";
+
+        public override bool Run(bool print = false)
         {
             // The input domain.
             var r = new Rectangle(0d, 0d, 10d, 10d);
@@ -42,7 +44,7 @@ namespace TriangleNet.Examples
 
             // L2 error
             //double error = Math.Sqrt(xy.Sum(p => Math.Pow(xyData[p.ID] - F(p), 2)));
-
+            SendInputGeneratedMessage(mesh);
             // Define tolerance dependent on mesh dimensions and size.
             double tolerance = 0.5 * Math.Max(r.Width, r.Height) / SIZE;
 

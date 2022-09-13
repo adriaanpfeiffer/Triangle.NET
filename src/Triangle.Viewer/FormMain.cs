@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Forms;
 using MeshExplorer.Controls;
 using MeshExplorer.IO;
@@ -67,7 +68,7 @@ namespace MeshExplorer
             if (control != null)
             {
                 InitializeRenderControl((Control)control);
-                renderManager.Initialize(control, new TriangleNet.Rendering.GDI.LayerRenderer());
+                renderManager.Initialize(control, new LayerRenderer());
             }
             else
             {
@@ -149,6 +150,7 @@ namespace MeshExplorer
                 mesh = sender as Mesh;
                 if (mesh != null)
                     HandleMeshImport();
+                Refresh();
             }
         }
 
@@ -823,19 +825,14 @@ namespace MeshExplorer
         {
             if (examplesToolStripMenuItem.DropDownItems.Count == 0)
             {
-                var type = typeof(IExample);
-                var types = type.Assembly.GetTypes()
-                    .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
-                    .OrderBy(t => int.Parse(t.Name.Replace("Example", "")));
-
-                types.ToList().ForEach(t =>
+                var examples = ExampleProvider.Examples();
+                examples.ForEach(e =>
                 {
-                    var example = (IExample)Activator.CreateInstance(t);
-                    var toolstripItem = examplesToolStripMenuItem.DropDownItems.Add($"{t.Name} - { example.Name}");
+                    var toolstripItem = examplesToolStripMenuItem.DropDownItems.Add($"{e.GetType().Name} - { e.Name}");
                     toolstripItem.Click += (s, ea) =>
                     {
-                        example.InputGenerated += frmGenerator_InputGenerated;
-                        example.Run();
+                        e.InputGenerated += frmGenerator_InputGenerated;
+                        e.Run();
                     };
                 });
             }

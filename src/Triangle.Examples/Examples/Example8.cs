@@ -10,11 +10,12 @@ namespace TriangleNet.Examples
     /// <summary>
     /// Using a user test function to define a maximum edge length constraint.
     /// </summary>
-    public static class Example8
+    public class Example8 : Example
     {
+        public override string Name => "User test function for maximum edge length constraint.";
         const double MAX_EDGE_LENGTH = 0.2;
 
-        public static bool Run(bool print = false)
+        public override bool Run(bool print = false)
         {
             var poly = new Polygon();
 
@@ -40,7 +41,7 @@ namespace TriangleNet.Examples
                     return false;
                 }
             }
-
+            SendInputGeneratedMessage(mesh);
             if (print) SvgImage.Save(mesh, "example-8.svg", 500);
 
             return true;

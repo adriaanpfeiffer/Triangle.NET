@@ -11,9 +11,10 @@ namespace TriangleNet.Examples
     /// <summary>
     /// Triangulate a polygon with hole with maximum area constraint, followed by mesh smoothing.
     /// </summary>
-    public class Example4
+    public class Example4 : Example
     {
-        public static bool Run(bool print = false)
+        public override string Name => "Mesh smoothing for polygon with hole and maximum area constraint.";
+        public override bool Run(bool print = false)
         {
             // Generate mesh.
             var mesh = CreateMesh();
@@ -34,7 +35,7 @@ namespace TriangleNet.Examples
 
                 SvgImage.Save(mesh, "example-4.svg", 500);
             }
-
+            SendInputGeneratedMessage(mesh);
             return quality.Area.Minimum < area && quality.Area.Maximum > area;
         }
 

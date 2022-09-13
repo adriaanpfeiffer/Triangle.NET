@@ -11,20 +11,11 @@ namespace TriangleNet.Examples
     /// <summary>
     /// Simple point set triangulation with convex hull.
     /// </summary>
-    public class Example2 : IExample
+    public class Example2 : Example
     {
-        public string Name {get;}
+        public override string Name => "Simple point set triangulation with convex hull.";
 
-        public string Description { get; }
-
-        public EventHandler InputGenerated { get; set; }
-
-        public Example2()
-        {
-            Name = "Simple point set triangulation with convex hull.";
-            Description = " Simple point set triangulation with convex hull.";
-        }
-        public  bool Run(bool print = false)
+        public override bool Run(bool print = false)
         {
             const int N = 50;
 
@@ -41,7 +32,7 @@ namespace TriangleNet.Examples
             // Generate mesh.
             var mesh = poly.Triangulate(options);
 
-            InputGenerated(mesh, EventArgs.Empty);
+            SendInputGeneratedMessage(mesh);
 
             if (print) SvgImage.Save(mesh, "example-2.svg", 500);
 
